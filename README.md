@@ -1,10 +1,10 @@
-# Docksal powered Drupal 8 Installation
+# Docksal powered Drupal 8 (Varbase) Installation
 
-This is a sample vanilla Drupal 8 installation pre-configured for use with Docksal.
+This is a sample vanilla Drupal 8 (Varbase) installation pre-configured for use with Docksal.
 
 Features:
 
-- Vanilla Drupal 8
+- Vanilla Drupal 8 (Varbase)
 - `fin init` [example](.docksal/commands/init)
 - Using the [default](.docksal/docksal.env#L9) Docksal LAMP stack with [image version pinning](.docksal/docksal.env#L13-L15)
 - PHP and MySQL settings overrides [examples](.docksal/etc)
@@ -23,8 +23,8 @@ Follow [Docksal environment setup instructions](https://docs.docksal.io/en/maste
 1. Clone this repo into your Projects directory
 
    ```
-   git clone https://github.com/docksal/drupal8.git drupal8
-   cd drupal8
+   git clone https://github.com/sa-adebayo/docksal-drupal8-varbase.git varbase
+   cd varbase
    ```
 
 2. Initialize the site
@@ -38,7 +38,7 @@ Follow [Docksal environment setup instructions](https://docs.docksal.io/en/maste
 3. Point your browser to
 
    ```
-   http://drupal8.docksal
+   http://varbase.docksal
    ```
 
 When the automated install is complete the command line output will display the admin username and password.
