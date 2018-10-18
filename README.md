@@ -1,49 +1,63 @@
-[![](https://www.drupal.org/files/styles/grid-3/public/project-images/Medium-Logo%20Color%20with%20padding.png)](http://www.drupal.org/project/varbase)
+# Docksal powered Drupal 8 Installation
 
-[![Build Status](https://travis-ci.org/Vardot/varbase.svg?branch=8.x-5.1)](https://travis-ci.org/Vardot/varbase/builds/431104304) Varbase 8.5.1
+This is a sample vanilla Drupal 8 installation pre-configured for use with Docksal.
 
-# Varbase Project
+Features:
 
-Project template for [Varbase distribution](http://www.drupal.org/project/varbase).
+- Vanilla Drupal 8
+- `fin init` [example](.docksal/commands/init)
+- Using the [default](.docksal/docksal.env#L9) Docksal LAMP stack with [image version pinning](.docksal/docksal.env#L13-L15)
+- PHP and MySQL settings overrides [examples](.docksal/etc)
+- Drush aliases [example](drush/aliases.drushrc.php) (`drush @docksal status`)
 
+## Setup instructions
 
-## Create a Varbase project with [Composer](https://getcomposer.org/download/):
+### Step #1: Docksal environment setup
 
-To install the most recent stable release of Varbase 8.5.x run this command:
-```
-composer create-project Vardot/varbase-project:^8.5.1 PROJECT_DIR_NAME --no-dev --no-interaction
-```
+**This is a one time setup - skip this if you already have a working Docksal environment.**
 
-To install the dev version of Varbase 8.5.x run this command:
-```
-composer create-project vardot/varbase-project:8.5.x-dev PROJECT_DIR_NAME --stability dev --no-interaction
-```
+Follow [Docksal environment setup instructions](https://docs.docksal.io/en/master/getting-started/env-setup)
 
+### Step #2: Project setup
 
-## [Create a new Vartheme sub theme for a project](https://github.com/Vardot/varbase/tree/8.x-5.x/scripts/README.md)
+1. Clone this repo into your Projects directory
 
-## [Automated Functional Testing](https://github.com/Vardot/varbase/blob/8.x-5.x/tests/README.md)
+   ```
+   git clone https://github.com/docksal/drupal8.git drupal8
+   cd drupal8
+   ```
 
-## [Varbase Gherkin features](https://github.com/Vardot/varbase/blob/8.x-5.x/tests/features/varbase/README.md)
+2. Initialize the site
 
-## [Varbase 8.5.x Developer Guide](https://docs.varbase.vardot.com)
+   This will initialize local settings and install the site via drush
 
-## [CHANGELOG for Varbase](https://github.com/Vardot/varbase/blob/8.x-5.x/CHANGELOG.md)
+   ```
+   fin init
+   ```
 
-## [General instructions on how to update Varbase](https://github.com/Vardot/varbase/blob/8.x-5.x/UPDATE.md)
+3. Point your browser to
 
+   ```
+   http://drupal8.docksal
+   ```
 
+When the automated install is complete the command line output will display the admin username and password.
 
+## More automation with 'fin init'
 
-# Notices
+Site provisioning can be automated using `fin init`, which calls the shell script in [.docksal/commands/init](.docksal/commands/init).  
+This script is meant to be modified per project. The one in this repo will give you a good starting example.
 
-### Requiring Drupal Modules with Dev Version in varbase-project/composer.json
-You will notice that we're requiring some Drupal modules in dev state with its commit hash. This is because of a bug in Composer. And it was discussed in https://github.com/composer/composer/issues/6366 and is highlighted in Composer documentation as follows:
+Some common tasks that can be handled by the init script (an other [custom commands](https://docs.docksal.io/en/master/fin/custom-commands/)):
 
-> Note: This feature has severe technical limitations, as the composer.json metadata will still be read from the branch name you specify before the hash. You should therefore only use this as a temporary solution during development to remediate transient issues, until you can switch to tagged releases. The Composer team does not actively support this feature and will not accept bug reports related to it.
+- initialize local settings files for Docker Compose, Drupal, Behat, etc.
+- import DB or perform a site install
+- compile Sass
+- run DB updates, revert features, clear caches, etc.
+- enable/disable modules, update variables values
 
-Therefore, our workaround, is to explicitly tag the commit hash we want in `varbase-project/composer.json`. This means that ALL Drupal modules dependencies which are in dev stage, are duplicated as a requirement for composer in both `varbase-project/composer.json` and `varbase/composer.json`.
+## Security notice
 
-This workaround will remain, until either a module has a tag (that we can tag without the commit hash) or a fix is provided from composer - hopefully in the near future!
-
-Read more at: https://www.drupal.org/node/2903606#comment-12230769
+This repo is intended for quick start demos and includes a hardcoded value for `hash_salt` in `settings.php`.  
+If you are basing your project code base on this repo, make sure you regenerate and update the `hash_salt` value.  
+A new value can be generated with `drush ev '$hash = Drupal\Component\Utility\Crypt::randomBytesBase64(55); print $hash . "\n";'`

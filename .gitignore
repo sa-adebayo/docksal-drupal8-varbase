@@ -1,3 +1,6 @@
+# Ignore binaries
+/bin
+
 # Ignore paths that contain user-generated content.
 docroot/*/settings.local.php
 docroot/files
@@ -6,6 +9,7 @@ docroot/sites/*/private
 acquia-file
 /log
 docroot/sites/default/settings.local.php
+docroot/sites/*/settings.local.php
 
 
 # Ignore vim swp files and gedit temp files
