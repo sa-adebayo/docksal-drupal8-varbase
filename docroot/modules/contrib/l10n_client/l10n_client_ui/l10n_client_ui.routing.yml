@@ -1,0 +1,7 @@
+l10n_client_ui.settings:
+  path: 'admin/config/regional/translate/client'
+  defaults:
+    _form: '\Drupal\l10n_client_ui\Form\SettingsForm'
+    _title: 'Localization client settings'
+  requirements:
+    _permission: 'administer languages'

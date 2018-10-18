@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * The varbase_heroslider_media.module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+* Implements hook_views_pre_render().
+*/
+function varbase_heroslider_media_views_pre_render(ViewExecutable $view) {
+  if (isset($view) && ($view->storage->id() == 'varbase_heroslider_media')) {
+    $view->element['#attached']['library'][] = 'varbase_heroslider_media/general-styling';
+    $view->element['#attached']['library'][] = 'varbase_heroslider_media/general-scripts';
+  }
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function varbase_heroslider_media_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+
+  if ($entity->getEntityType()->id() == 'node'
+    && $entity->bundle() == 'varbase_heroslider_media'
+    && isset($build['field_media_single'])
+    && isset($build['field_media_single']['#items'])) {
+    
+    $build['field_media_single'][0]['#attached']['library'][] = 'varbase_heroslider_media/general-styling';
+    $build['field_media_single'][0]['#attached']['library'][] = 'varbase_heroslider_media/general-scripts';
+  }
+}

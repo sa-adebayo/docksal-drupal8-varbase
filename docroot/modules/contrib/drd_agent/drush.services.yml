@@ -1,0 +1,5 @@
+services:
+  drd_agent.commands:
+    class: \Drupal\drd_agent\Commands\Drush
+    tags:
+      - { name: drush.command }

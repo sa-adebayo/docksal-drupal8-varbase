@@ -1,0 +1,3 @@
+use localization client ui:
+  title: 'Use on-page interface translation'
+  description: 'Makes it possible to translate the Drupal interface on-page.'

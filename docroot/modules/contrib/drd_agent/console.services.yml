@@ -1,0 +1,6 @@
+services:
+  drd_agent.command.setup:
+    class: Drupal\drd_agent\Command\Setup
+    arguments: []
+    tags:
+      - { name: drupal.command }

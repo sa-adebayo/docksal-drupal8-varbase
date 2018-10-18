@@ -1,0 +1,15 @@
+entity.tour.clone_form:
+  path: '/admin/config/user-interface/tour/manage/{tour}/clone'
+  defaults:
+    _entity_form: tour.clone
+    _title: 'Clone tour'
+  requirements:
+    _permission: 'administer tour'
+
+entity.tour.export_form:
+  path: '/admin/config/user-interface/tour/manage/{tour}/export'
+  defaults:
+    _entity_form: tour.export
+    _title: 'Export tour'
+  requirements:
+    _permission: 'administer tour'

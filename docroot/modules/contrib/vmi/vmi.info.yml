@@ -1,0 +1,16 @@
+name: View Modes Inventory
+type: module
+description: This module has a set of template view modes that we typically use (some of them) in each website.
+# core: 8.x
+package: Layout
+dependencies:
+  - ds
+  - ds_extras
+  - field_group
+  - smart_trim
+
+# Information added by Drupal.org packaging script on 2018-09-06
+version: '8.x-2.0'
+core: '8.x'
+project: 'vmi'
+datestamp: 1536224287

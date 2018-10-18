@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * @file
+ * Module file for layout builder restrictions.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\layout_builder\OverridesSectionStorageInterface;
+use Drupal\layout_builder_restrictions\Form\FormAlter;
+
+/**
+ * Implements hook_plugin_filter_TYPE__CONSUMER_alter().
+ *
+ * Curate the blocks available in the Layout Builder "Add Block" UI.
+ */
+function layout_builder_restrictions_plugin_filter_block__layout_builder_alter(array &$definitions, array $extra) {
+  // Invoke deprecated API hook for restricting blocks. @todo: remove.
+  $keys = \Drupal::moduleHandler()->invokeAll('layout_builder_restrictions_allowed_block_keys');
+  \Drupal::moduleHandler()->alter('layout_builder_restrictions_allowed_block_keys', $keys);
+  if (!empty($keys)) {
+    @trigger_error('hook_layout_builder_restrictions_allowed_block_keys and hook_layout_builder_restrictions_allowed_block_keys_alter is deprecated together with Drupal 8.6.0. Please use hook_plugin_filter_TYPE__CONSUMER_alter and more specifically hook_plugin_filter_block__layout_builder_alter instead.', E_USER_DEPRECATED);
+    foreach ($definitions as $delta => $definition) {
+      if (!in_array((string) $definition['category'], $keys)) {
+        unset($definitions[$delta]);
+      }
+    }
+  }
+
+  // Allow hook implementations to modify the allowed blocks.
+  \Drupal::moduleHandler()->alter('layout_builder_restrictions_chooser_result', $definitions);
+
+  // Respect restrictions on allowed blocks specified by the section storage.
+  if (isset($extra['section_storage'])) {
+    $default = $extra['section_storage'] instanceof OverridesSectionStorageInterface ? $extra['section_storage']->getDefaultSectionStorage() : $extra['section_storage'];
+    $allowed_blocks = $default->getThirdPartySetting('layout_builder_restrictions', 'allowed_blocks', []);
+    // Filter blocks from entity-specific SectionStorage (i.e., UI).
+    if (!empty($allowed_blocks)) {
+      foreach ($definitions as $delta => $definition) {
+        $category = (string) $definition['category'];
+        if (in_array($category, array_keys($allowed_blocks))) {
+          // This category has restrictions.
+          if (!in_array($delta, $allowed_blocks[$category])) {
+            // The current block is not in the allowed list for this category.
+            unset($definitions[$delta]);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_plugin_filter_TYPE__CONSUMER_alter().
+ *
+ * Curate the layouts available in the Layout Builder "Add Section" UI.
+ */
+function layout_builder_restrictions_plugin_filter_layout__layout_builder_alter(array &$definitions, array $extra) {
+  // Invoke deprecated API hook for restricting layouts. @todo: remove.
+  $keys = \Drupal::moduleHandler()->invokeAll('layout_builder_restrictions_allowed_layouts');
+  \Drupal::moduleHandler()->alter('layout_builder_restrictions_allowed_layouts', $keys);
+  if (!empty($keys)) {
+    @trigger_error('hook_layout_builder_restrictions_allowed_layouts and hook_layout_builder_restrictions_allowed_layouts_alter is deprecated together with Drupal 8.6.0. Please use hook_plugin_filter_TYPE__CONSUMER_alter and more specifically hook_plugin_filter_layout__layout_builder_alter instead.', E_USER_DEPRECATED);
+    foreach ($definitions as $delta => $definition) {
+      if (!in_array($delta, $keys)) {
+        unset($definitions[$delta]);
+      }
+    }
+  }
+
+  // Allow hook implementations to audit available layouts.
+  \Drupal::moduleHandler()->alter('layout_builder_restrictions_allowed_layouts', $definitions);
+
+  // Respect restrictions on allowed layouts specified by section storage.
+  if (isset($extra['section_storage'])) {
+    $default = $extra['section_storage'] instanceof OverridesSectionStorageInterface ? $extra['section_storage']->getDefaultSectionStorage() : $extra['section_storage'];
+    $allowed_layouts = $default->getThirdPartySetting('layout_builder_restrictions', 'allowed_layouts', []);
+    // Filter blocks from entity-specific SectionStorage (i.e., UI).
+    if (!empty($allowed_layouts)) {
+      $definitions = array_intersect_key($definitions, array_flip($allowed_layouts));
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the entity view display edit form.
+ */
+function layout_builder_restrictions_form_entity_view_display_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  \Drupal::classResolver(FormAlter::class)->alterEntityViewDisplayForm($form, $form_state, $form_id);
+}

@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: text_and_image
+label: 'Text and image'
+icon_uuid: null
+description: null
+behavior_plugins: {  }

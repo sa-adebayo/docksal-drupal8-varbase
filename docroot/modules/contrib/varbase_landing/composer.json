@@ -1,0 +1,50 @@
+{
+  "name": "drupal/varbase_landing",
+  "description": "Provides the basis for Landing Pages, which are built to include appealing stacked components that are visually separate.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/varbase_landing",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/varbase_landing",
+    "source": "http://cgit.drupalcode.org/varbase_landing"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+      },
+    "assets": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  },
+  "require": {
+    "composer/installers": "^1.5.0",
+    "oomphinc/composer-installers-extender": "^1.1.2",
+    "cweagans/composer-patches": "^1.6.4",
+    "drupal/drupal-library-installer-plugin": "^0.3",
+    "drupal/varbase_media": "5.*",
+    "drupal/varbase_bootstrap_paragraphs": "5.*",
+    "drupal/paragraphs_features": "^1.4",
+    "drupal/paragraphs_asymmetric_translation_widgets": "^1.0-alpha2"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-5.x": "8.5.x-dev"
+    },
+    "installer-types": [
+      "bower-asset",
+      "npm-asset"
+    ],
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true
+  }
+}

@@ -1,0 +1,13 @@
+name: 'Paragraphs Features Test'
+type: module
+description: 'Provides Test scaffolds for Paragraphs Features module.'
+# core: 8.x
+package: Paragraphs
+dependencies:
+  - paragraphs_features:paragraphs_features
+
+# Information added by Drupal.org packaging script on 2018-09-12
+version: '8.x-1.4'
+core: '8.x'
+project: 'paragraphs_features'
+datestamp: 1536759494

@@ -1,0 +1,53 @@
+{
+  "name": "drupal/vartheme_admin",
+  "description": "A simple one-column, tableless, minimalist administration theme for Varbase standard websites.",
+  "type": "drupal-theme",
+  "homepage": "https://www.drupal.org/project/vartheme_admin",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/vartheme_admin",
+    "source": "http://cgit.drupalcode.org/vartheme_admin"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+      },
+    "assets": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  },
+  "require": {
+    "composer/installers": "^1.5.0",
+    "oomphinc/composer-installers-extender": "^1.1.2",
+    "cweagans/composer-patches": "^1.6.4",
+    "drupal/drupal-library-installer-plugin": "^0.3",
+    "drupal/adminimal_theme": "1.3"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-5.x": "8.5.x-dev"
+    },
+    "installer-types": [
+      "bower-asset",
+      "npm-asset"
+    ],
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true,
+    "patches": {
+      "drupal/adminimal_theme": {
+        "Issue #2696393: Checkboxes with .error class are not usable":
+        "https://www.drupal.org/files/issues/adminimal-checkboxes_with_error-2696393-3.patch"
+      }
+    }
+  }
+}

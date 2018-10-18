@@ -1,0 +1,6 @@
+name: Login Destination
+type: module
+description: Add possibility customize the destination that the user is redirected to after login.
+package: User
+core: 8.x
+configure: login_destination.settings

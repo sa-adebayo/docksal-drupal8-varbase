@@ -1,0 +1,15 @@
+name: Media entity GoogleDocs
+description: 'Media entity GoogleDocs provider.'
+package: Media
+
+type: module
+# core: 8.x
+
+dependencies:
+  - drupal:media (>= 8.4)
+
+# Information added by Drupal.org packaging script on 2018-01-29
+version: '8.x-4.0'
+core: '8.x'
+project: 'media_entity_googledocs'
+datestamp: 1517226187

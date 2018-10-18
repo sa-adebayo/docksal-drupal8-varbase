@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * @file
+ * On-page tool for easier interface translation.
+ */
+
+use Drupal\l10n_client_ui\Form\TranslationForm;
+
+/**
+ * Returns whether the localization client interface should be added.
+ *
+ * @return bool
+ */
+function l10n_client_ui_access_tools() {
+  return
+    // @todo figure out how to skip the string collection itself in this case.
+    \Drupal::currentUser()->hasPermission('use localization client ui') &&
+    (
+      \Drupal::languageManager()->getCurrentLanguage()->getID() != 'en' ||
+      locale_is_translatable('en')
+    );
+}
+
+/**
+ * Implements hook_toolbar().
+ */
+function l10n_client_ui_toolbar() {
+  if (!l10n_client_ui_access_tools()) {
+    return;
+  }
+
+  $tab['l10n_client_ui'] = array(
+    '#type' => 'toolbar_item',
+    'tab' => array(
+      '#type' => 'html_tag',
+      '#tag' => 'button',
+      '#value' => t('Translate page'),
+      '#attributes' => array(
+        'class' => array('toolbar-icon', 'toolbar-icon-l10n_client_ui'),
+        'role' => 'button',
+        'aria-pressed' => 'false',
+      ),
+    ),
+    '#wrapper_attributes' => array(
+      'class' => array('l10n_client_ui-toolbar-tab'),
+      'id' => 'toolbar-tab-l10n_client_ui',
+    ),
+    '#attached' => array(
+      'library' => array(
+        'l10n_client_ui/l10n_client_ui',
+      ),
+    ),
+  );
+
+  return $tab;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ */
+function l10n_client_ui_preprocess_page(&$variables) {
+  if (!l10n_client_ui_access_tools()) {
+    return;
+  }
+
+  // Collect a list of language names for the used languages too.
+  $language_list = \Drupal::languageManager()->getLanguages();
+  $languages = [];
+
+  // Handle recorded interface translation data.
+  /** @var \Drupal\l10n_client_ui\InterfaceTranslationRecorder $interface_recorder */
+  $interface_recorder = \Drupal::service('string_translator.l10n_client_ui');
+  $strings = $interface_recorder->getRecordedData();
+  if (count($strings)) {
+    foreach($strings as $langcode => $contexts) {
+      $languages[$langcode] = $language_list[$langcode]->getName();
+      foreach ($contexts as $context => $string_list) {
+        foreach ($string_list as $string => &$target) {
+          /** @var \Drupal\locale\StringDatabaseStorage $translation */
+          $translation = \Drupal::service('locale.storage')->findTranslation(array(
+            'language' => $langcode,
+            'source' => $string,
+            'context' => $context,
+          ));
+          $strings[$langcode][$context][$string] = [$translation && !empty($translation->translation) ? $translation->translation : FALSE];
+        }
+      }
+    }
+  }
+
+  $form = new TranslationForm;
+  $form->setValues($languages, $strings);
+  $for = \Drupal::formBuilder()->getForm($form);
+
+  // Add to page content.
+  $content = array(
+    '#attached' => array(
+      'library' => array('l10n_client_ui/l10n_client_ui'),
+      'drupalSettings' => array(
+        'l10n_client_ui' => $strings
+      ),
+    ),
+  );
+  $variables['page']['content'][] = $content;
+  $variables['page']['content'][] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('l10n_client_ui--container')
+    ),
+    'form' => $for,
+  );
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function l10n_client_ui_menu_local_tasks_alter(&$data, $route_name) {
+  // This module adds one more settings screen, so modify the existing
+  // settings screen to be more specific about what it is doing.
+  if (!empty($data['tabs'][0]['locale.settings'])) {
+    $data['tabs'][0]['locale.settings']['#link']['title'] = t('Update settings');
+  }
+}

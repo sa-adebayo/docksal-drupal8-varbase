@@ -1,0 +1,14 @@
+name: Social Auth LinkedIn
+type: module
+description: 'Social Auth integration for LinkedIn.'
+package: Social
+# core: 8.x
+configure: social_auth_linkedin.settings_form
+dependencies:
+  - social_auth:social_auth (>= 8.x-2.x)
+
+# Information added by Drupal.org packaging script on 2018-02-21
+version: '8.x-2.0-beta1'
+core: '8.x'
+project: 'social_auth_linkedin'
+datestamp: 1519178586

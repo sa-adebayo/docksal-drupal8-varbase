@@ -1,0 +1,28 @@
+googledocsmedia_entity_googledocs.settings:
+  type: config_object
+  label: 'Media entity GoogleDocs settings'
+  mapping:
+    local_images:
+      type: string
+      label: 'Base folder for thumbnails'
+
+media.source.googledocs:
+  type: media.source.field_aware
+  label: '"GoogleDocs" media source configuration'
+
+field.formatter.settings.googledocs_embed_generic:
+  type: mapping
+  label: 'GoogleDocs display format settings'
+  mapping:
+    width:
+      type: integer
+      label: 'Width'
+    height:
+      type: integer
+      label: 'Height'
+    fullscreen:
+      type: boolean
+      label: 'Fullscreen'
+    scrolling:
+      type: boolean
+      label: 'Scrolling'

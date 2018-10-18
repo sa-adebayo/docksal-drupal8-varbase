@@ -1,0 +1,167 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.varbase_heroslider_media.field_brief
+    - field.field.node.varbase_heroslider_media.field_link
+    - field.field.node.varbase_heroslider_media.field_media_single
+    - node.type.varbase_heroslider_media
+  module:
+    - ds
+    - field_group
+    - link
+    - user
+third_party_settings:
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+    regions:
+      ds_content:
+        - field_media_single
+        - group_div
+        - group_row
+        - group_col
+        - node_title
+        - field_brief
+        - field_link
+        - group_container
+    fields:
+      node_title:
+        plugin_id: node_title
+        weight: 9
+        label: hidden
+        formatter: default
+  field_group:
+    group_div:
+      children:
+        - group_container
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        label: 'Hero slide content'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: hero-slide-content
+      label: 'Hero slide content'
+      region: hidden
+    group_container:
+      children:
+        - group_row
+      parent_name: group_div
+      weight: 20
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: container
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: container
+      region: hidden
+    group_row:
+      children:
+        - group_col
+      parent_name: group_container
+      weight: 4
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: row
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: row
+      region: hidden
+    group_col:
+      children:
+        - node_title
+        - field_brief
+        - field_link
+      parent_name: group_row
+      weight: 8
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: 'col-xs-12 col-md-12 no-padding'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: col
+      region: hidden
+id: node.varbase_heroslider_media.default
+targetEntityType: node
+bundle: varbase_heroslider_media
+mode: default
+content:
+  field_brief:
+    weight: 10
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: ds_content
+  field_link:
+    weight: 11
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    type: link
+    region: ds_content
+  field_media_single:
+    weight: 0
+    label: hidden
+    settings:
+      view_mode: se2e_standard
+      link: false
+    third_party_settings:
+      ds:
+        ft:
+          id: default
+          settings:
+            lb: ''
+            lb-col: false
+            classes: {  }
+    type: entity_reference_entity_view
+    region: ds_content
+hidden:
+  langcode: true
+  links: true

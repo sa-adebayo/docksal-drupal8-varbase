@@ -1,0 +1,101 @@
+<?php
+/**
+ * @file
+ * Provides the hooks implementation to interface with Libraries API.
+ * 
+ * Sponsored by: www.freelance-drupal.com
+ */
+
+/**
+ * Implements hook_libraries_info().
+ */
+function masonry_libraries_info() {
+  $libraries['masonry'] = array(
+    'name' => 'Masonry',
+    'vendor url' => 'http://masonry.desandro.com/',
+    'download url' => 'http://masonry.desandro.com/',
+    'version arguments' => array(
+      'file' => 'masonry.pkgd.min.js',
+      // Masonry 3.x
+      'pattern' => '/Masonry\s+PACKAGED\s+v?([0-9\.]+)/',
+      'lines' => 2,
+      'cols' => 30,
+    ),
+    'files' => array(
+      'js' => array(
+        'masonry.pkgd.min.js',
+      ),
+    ),
+  );
+  $libraries['imagesloaded'] = array(
+    'name' => 'Images Loaded',
+    'vendor url' => 'http://desandro.github.io/imagesloaded',
+    'download url' => 'http://desandro.github.io/imagesloaded/imagesloaded.pkgd.min.js',
+    'version arguments' => array(
+      'file' => 'imagesloaded.pkgd.min.js',
+      // imagesLoaded 3.x
+      'pattern' => '/imagesLoaded\s+PACKAGED\s+v?([0-9\.]+)/',
+      'lines' => 2,
+      'cols' => 35,
+    ),
+    'files' => array(
+      'js' => array(
+        'imagesloaded.pkgd.min.js',
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Check if the Masonry and imagesLoaded libraries have been loaded.
+ *
+ * @return
+ *   A boolean indicating the loaded status.
+ */
+function masonry_loaded() {
+  $masonry = libraries_load('masonry');
+  $imagesloaded = libraries_load('imagesloaded');
+  if ((!empty($masonry['loaded'])) && (!empty($imagesloaded['loaded']))) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ *
+ * @TODO Remove this HACK when libraries API module is compatible with D8.
+ */
+function masonry_js_alter(&$javascript) {
+  $weight = 0;
+  
+  $masonry = libraries_detect('masonry');
+  if (isset($masonry['files']['js'])) {
+    $masonry_path = (isset($masonry['library path'])) ? $masonry['library path'] : 'libraries/' . $masonry['name'];
+    foreach ($masonry['files']['js'] as $masonry_js => $file) {
+      $filepath = "$masonry_path/$masonry_js";
+      $javascript[$filepath] = array(
+          'group' => 50,
+          'weight' => $weight++,
+          'scope' => 'footer',
+        ) + drupal_js_defaults($filepath);
+    }
+  }
+
+  $images_loaded = libraries_detect('imagesloaded');
+  if (isset($images_loaded['files']['js'])) {
+    $images_loaded_path = (isset($images_loaded['library path'])) ? $images_loaded['library path'] : 'libraries/' . $images_loaded['name'];
+    foreach ($images_loaded['files']['js'] as $images_loaded_js => $file) {
+      $filepath = "$images_loaded_path/$images_loaded_js";
+      $javascript[$filepath] = array(
+          'group' => 50,
+          'weight' => $weight++,
+          'scope' => 'footer',
+        ) + drupal_js_defaults($filepath);
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Core functionality for Tour UI module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function tour_builder_entity_type_alter(array &$entity_types) {
+  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $entity_types['tour']->setFormClass('clone', 'Drupal\tour_builder\Form\TourBuilderCloneForm');
+  $entity_types['tour']->setLinkTemplate('clone-form', '/admin/config/user-interface/tour/manage/{tour}/clone');
+
+  $entity_types['tour']->setFormClass('export', 'Drupal\tour_builder\Form\TourBuilderExportForm');
+  $entity_types['tour']->setLinkTemplate('export-form', '/admin/config/user-interface/tour/manage/{tour}/export');
+
+  $entity_types['tour']->setListBuilderClass('Drupal\tour_builder\TourBuilderListBuilder');
+
+  // We redirect to another module so no need for a FormClass.
+  $entity_types['tour']->setLinkTemplate('export-config', '/admin/config/development/configuration/single/export/tour/{tour}');
+}

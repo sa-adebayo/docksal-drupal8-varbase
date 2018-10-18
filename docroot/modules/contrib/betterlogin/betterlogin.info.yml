@@ -1,0 +1,5 @@
+name: Better Login
+type: module
+description: Make the login screens better :)
+package: User interface
+core: 8.x

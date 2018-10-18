@@ -1,0 +1,14 @@
+mail_edit.list:
+  path: /admin/config/system/mail-edit
+  defaults:
+    _title: 'Mail templates'
+    _controller: '\Drupal\mail_edit\Controller\MailListController::listAll'
+  requirements:
+    _permission: 'administer mail templates'
+
+mail_edit.edit:
+  path: '/admin/config/system/mail-edit/{id}'
+  defaults:
+    _form: \Drupal\mail_edit\Form\MailEditTemplateForm
+  requirements:
+    _permission: 'administer mail templates'

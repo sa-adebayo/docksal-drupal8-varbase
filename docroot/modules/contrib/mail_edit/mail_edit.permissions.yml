@@ -1,0 +1,4 @@
+'administer mail templates':
+  description: 'Change the templates used for creating mail messages to send to users.'
+  title: 'Administer mail templates'
+  restrict access: true

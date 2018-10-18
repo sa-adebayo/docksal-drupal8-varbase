@@ -1,0 +1,11 @@
+name: RoleAssign
+description: 'Allows site administrators to further delegate the task of managing user''s roles.'
+# core: 8.x
+type: module
+configure: roleassign.settings
+
+# Information added by Drupal.org packaging script on 2016-02-02
+version: '8.x-1.0-alpha2'
+core: '8.x'
+project: 'roleassign'
+datestamp: 1454396974

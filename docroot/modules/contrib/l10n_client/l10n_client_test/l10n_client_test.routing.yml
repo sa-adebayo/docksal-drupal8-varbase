@@ -1,0 +1,6 @@
+l10n_client_test.xmlrpc:
+  path: 'l10n-client-test/xmlrpc.php'
+  defaults:
+    _controller: '\Drupal\l10n_client_test\Controller\TestController::mockPage'
+  requirements:
+    _permission: 'access content'

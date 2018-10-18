@@ -1,0 +1,2 @@
+use_server: true
+server: 'https://localize.drupal.org/'

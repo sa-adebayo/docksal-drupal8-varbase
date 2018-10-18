@@ -1,0 +1,6 @@
+services:
+  layout_builder_restrictions.event_subscriber:
+    class: Drupal\layout_builder_restrictions\EventSubscriber\LayoutBuilderRestrictionsSubscriber
+    arguments: ['@current_route_match', '@module_handler']
+    tags:
+      - { name: event_subscriber }

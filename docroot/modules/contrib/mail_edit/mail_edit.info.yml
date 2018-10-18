@@ -1,0 +1,6 @@
+name: 'Mail Editor'
+description: 'Allows editing of e-mail templates.'
+core: 8.x
+type: module
+package: 'Mail'
+configure: mail_edit.list

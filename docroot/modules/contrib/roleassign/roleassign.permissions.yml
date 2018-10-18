@@ -1,0 +1,4 @@
+assign roles:
+  title: 'Assign roles'
+  description: 'Allow users with the Administer users permission to assign a restricted set of roles.'
+  restrict access: true

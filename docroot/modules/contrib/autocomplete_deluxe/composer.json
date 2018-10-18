@@ -1,0 +1,26 @@
+{
+  "name": "drupal/autocomplete_deluxe_8",
+  "description": "Enhanced autocomplete using Jquery UI autocomplete.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/sandbox/edwardchan/2888186",
+  "authors": [{
+    "name": "Edward Chan"
+  }],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/2888186"
+  },
+  "license": "GPL-2.0+",
+  "repositories": [{
+    "type": "package",
+    "package": {
+      "name": "drupal/autocomplete_deluxe_8",
+      "version": "8.0.0",
+      "type": "drupal-module",
+      "source": {
+        "url": "https://git.drupal.org:sandbox/edwardchan/2888186.git",
+        "type": "git",
+        "reference": "refs/heads/8.x-1.x"
+      }
+    }
+  }]
+}

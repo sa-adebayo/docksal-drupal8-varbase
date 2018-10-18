@@ -1,0 +1,41 @@
+.tout-view-mode .field--name-node-title {
+  position: static;
+  color: #fff;
+}
+.tout-view-mode .field--name-node-title h3 {
+  position: static;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+.tout-view-mode .field--name-node-title h3 a {
+  color: #fff;
+  text-decoration: none;
+  position: static;
+}
+.tout-view-mode .field--name-node-title h3 a::before {
+  position: absolute;
+  content: '';
+  display: block;
+  overflow: hidden;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+}
+.tout-view-mode a {
+  z-index: 3;
+  position: relative;
+}
+.tout-view-mode .tout-content {
+  background: linear-gradient(to bottom, transparent 65%, #000 105%) repeat scroll 0 0;
+  background: -webkit-linear-gradient(to bottom, transparent 65%, #000 105%) repeat scroll 0 0;
+  background: -o-linear-gradient(to bottom, transparent 65%, #000 105%) repeat scroll 0 0;
+  background: -moz-linear-gradient(to bottom, transparent 65%, #000 105%) repeat scroll 0 0;
+}
+.tout-view-mode .tout-content:hover,
+.tout-view-mode .tout-content:focus,
+.tout-view-mode .tout-content:active {
+  opacity: 0.9;
+}

@@ -1,0 +1,23 @@
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.media.varbase_media_hero_slider
+    - field.field.media.video.field_media_cover_image
+    - field.field.media.video.field_media_in_library
+    - field.field.media.video.field_media_video_file
+    - media.type.video
+id: media.video.varbase_media_hero_slider
+targetEntityType: media
+bundle: video
+mode: varbase_media_hero_slider
+content: {  }
+hidden:
+  created: true
+  field_media_cover_image: true
+  field_media_in_library: true
+  field_media_video_file: true
+  langcode: true
+  name: true
+  thumbnail: true
+  uid: true

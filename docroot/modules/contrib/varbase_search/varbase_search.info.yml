@@ -1,0 +1,17 @@
+name: 'Varbase Search'
+description: 'Provides search configuration, and offering search capabilities.'
+type: module
+# core: 8.x
+# version: 8.x-5.x-dev
+package: Varbase
+dependencies:
+  - varbase_core
+  - search_api
+  - search_api_db
+  - ultimate_cron
+
+# Information added by Drupal.org packaging script on 2018-09-20
+version: '8.x-5.1'
+core: '8.x'
+project: 'varbase_search'
+datestamp: 1537447983

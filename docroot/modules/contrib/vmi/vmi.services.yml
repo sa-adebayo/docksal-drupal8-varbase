@@ -1,0 +1,6 @@
+services:
+  vmi.factory:
+    class: Drupal\vmi\ViewModesInventoryFactory
+    arguments: []
+    tags:
+      - { name: backend_overridable }

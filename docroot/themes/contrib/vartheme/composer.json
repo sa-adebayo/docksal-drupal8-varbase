@@ -1,0 +1,47 @@
+{
+  "name": "drupal/vartheme",
+  "description": "A base theme for Varbase standard websites. Based on Bootstrap theme with Bootstrap 3",
+  "type": "drupal-theme",
+  "homepage": "https://www.drupal.org/project/vartheme",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/vartheme",
+    "source": "http://cgit.drupalcode.org/vartheme"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+      },
+    "assets": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  },
+  "require": {
+    "composer/installers": "^1.5.0",
+    "oomphinc/composer-installers-extender": "^1.1.2",
+    "cweagans/composer-patches": "^1.6.4",
+    "drupal/drupal-library-installer-plugin": "^0.3",
+    "drupal/bootstrap": "^3.13"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-5.x": "8.5.x-dev"
+    },
+    "installer-types": [
+      "bower-asset",
+      "npm-asset"
+    ],
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true
+  }
+}

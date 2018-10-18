@@ -1,0 +1,5 @@
+mail_edit.list:
+  route_name: mail_edit.list
+  title: 'Mail templates'
+  description: 'Edit mails being sent out by Drupal.'
+  parent: system.admin_config_system

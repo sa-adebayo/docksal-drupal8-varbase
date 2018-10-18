@@ -1,0 +1,37 @@
+name: 'Varbase Core'
+description: 'Provides core components required by other features.'
+type: module
+# core: 8.x
+# version: 8.x-5.x-dev
+# project: varbase_core
+package: Varbase
+dependencies:
+  - autocomplete_deluxe
+  - block
+  - block_content
+  - coffee
+  - crop
+  - diff
+  - ds
+  - entity_browser
+  - entityqueue
+  - extlink
+  - field
+  - field_group
+  - file
+  - media
+  - menu_link_content
+  - metatag
+  - node
+  - path
+  - smart_trim
+  - taxonomy
+  - text
+  - user
+  - yoast_seo
+
+# Information added by Drupal.org packaging script on 2018-09-20
+version: '8.x-5.3'
+core: '8.x'
+project: 'varbase_core'
+datestamp: 1537447084

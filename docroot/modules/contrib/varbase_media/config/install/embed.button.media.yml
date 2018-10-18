@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.file
+    - media.type.image
+    - media.type.video
+    - media.type.video_embed
+  module:
+    - entity_embed
+    - media
+label: 'Media Library'
+id: media
+type_id: entity
+type_settings:
+  entity_type: media
+  bundles:
+    - file
+    - image
+    - video_embed
+    - video
+  display_plugins:
+    - 'view_mode:media.large'
+    - 'view_mode:media.medium'
+    - 'view_mode:media.original'
+    - 'view_mode:media.small'
+  entity_browser: editor_media_browser
+  entity_browser_settings:
+    display_review: false
+icon_uuid: null

@@ -1,0 +1,8 @@
+name: 'Localization Client Interface'
+description: 'On-page tool for easier interface translation.'
+type: module
+core: 8.x
+configure: l01n_client_ui.settings
+dependencies:
+  - locale
+package: Multilingual

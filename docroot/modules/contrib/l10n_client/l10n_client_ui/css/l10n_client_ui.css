@@ -1,0 +1,343 @@
+/* Tab appearance. */
+.toolbar .toolbar-bar .l10n_client_ui-toolbar-tab.toolbar-tab {
+  float: right; /* LTR */
+}
+[dir="rtl"] .toolbar .toolbar-bar .l10n_client_ui-toolbar-tab.toolbar-tab {
+  float: left;
+}
+.toolbar .toolbar-bar .l10n_client_ui-toolbar-tab .toolbar-item {
+  margin: 0;
+}
+[dir="rtl"] .toolbar .toolbar-bar .l10n_client_ui-toolbar-tab .toolbar-item {
+  padding-right: 1.3333em;
+}
+.toolbar .l10n_client_ui-toolbar-tab button.active {
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.25) 20%, transparent 200%);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.25) 20%, transparent 200%);
+}
+.l10n_client_ui-toolbar-tab button:focus {
+  outline: thin dotted;
+}
+.toolbar-bar .toolbar-icon-l10n_client_ui:before {
+  background-image: url(../images/translate_icon_bebebe.svg);
+}
+.toolbar-bar .toolbar-icon-l10n_client_ui:active:before,
+.toolbar-bar .toolbar-icon-l10n_client_ui:before {
+  background-image: url(../images/translate_icon_ffffff.svg);
+}
+
+/* @todo Remove once https://drupal.org/node/1916690 is resolved. */
+.toolbar .l10n_client_ui-toolbar-tab.toolbar-tab.hidden {
+  display: none;
+}
+
+.l10n_client_ui--container {
+  display: none;
+}
+.l10n_client_ui--container .ui-dialog {
+  display: block;
+}
+.l10n_client_ui--container #edit-list {
+  overflow-y: scroll;
+  height: 180px;
+  clear: both;
+}
+.l10n_client_ui--source-string,
+.l10n_client_ui--translation-string {
+  width: 40%;
+}
+.l10n_client_ui--skip,
+.l10n_client_ui--save {
+  width: 40px;
+  text-indent: -200px;
+  overflow: hidden;
+  background-image: url(../images/remove_595959.svg);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.l10n_client_ui--save {
+  background-image: url(../images/check_bebebe.svg);
+}
+.l10n_client_ui--save.activated {
+  background-image: url(../images/check_0074bd.svg);
+}
+.l10n_client_ui--save.saving {
+  background-image: url(../images/check_77b259.svg);
+}
+
+.l10n_client_ui--container .form-item-type,
+.l10n_client_ui--container .form-item-search,
+.l10n_client_ui--container .form-item-language,
+.l10n_client_ui--container .form-item-stats {
+  float: left;
+  margin-top: 0;
+}
+.l10n_client_ui--container .form-item-type {
+  clear: left;
+}
+.l10n_client_ui--container .form-item-search,
+.l10n_client_ui--container .form-item-stats {
+  padding-left: 15px;
+}
+.l10n_client_ui--container .form-item-search label {
+  visibility: hidden;
+}
+.l10n_client_ui--container .form-item-search input {
+  width: 300px;
+}
+
+.l10n_client_ui--stats {
+  width: 200px;
+  height: 1.5em;
+  background-color: #ededed;
+}
+.l10n_client_ui--stats-done {
+  height: 1.5em;
+  background-color: darkseagreen;
+}
+
+#l10n_client_ui-ride {
+  display: none;
+}
+.l10n_client_ui-tip-source {
+  margin-bottom: 1em;
+}
+.l10n_client_ui-tip-target {
+  color: #333;
+}
+
+/* Override placement of the tour progress indicator. */
+.tour-progress {
+  position: absolute;
+  /* Equals paddings from .joyride-content-wrapper */
+  bottom: 0;
+  right: 0; /* LTR */
+}
+[dir="rtl"] .tour-progress {
+  right: auto;
+  left: 0;
+}
+
+/* @todo Remove once https://drupal.org/node/1916690 is resolved. */
+.toolbar .tour-toolbar-tab.toolbar-tab.hidden {
+  display: none;
+}
+
+/* JoyRide Styles. */
+#joyRideTipContent {
+  display: none;
+}
+
+/* Default styles for the container */
+.joyride-tip-guide {
+  position: absolute;
+  display: none;
+  width: 300px;
+  z-index: 101;
+  top: 0; /* keeps the page from scrolling when calculating position. */
+  left: 0;
+  padding: 1em 1em 1.5em 1.5em; /* LTR */
+  font-size: 0.9em;
+}
+[dir="rtl"] .joyride-tip-guide {
+  padding: 1em 1.5em 1.5em 1em;
+}
+
+.joyride-content-wrapper {
+  /* Apply padding from parent .joyride-tip-guide to absolutely positioned children. */
+  position: relative;
+  padding-right: 1em; /* LTR */
+}
+[dir="rtl"] .joyride-content-wrapper {
+  padding-right: 0;
+  padding-left: 1em;
+}
+
+/* Mobile */
+@media only screen and (max-width: 767px) {
+  .joyride-tip-guide {
+    width: 85%;
+    left: 2.5%;
+  }
+}
+
+/* Add a little css triangle pip, older browser just miss out on the fanciness of it. */
+.joyride-tip-guide .joyride-nub {
+  display: block;
+  position: absolute;
+  left: 22px;
+  width: 0;
+  height: 0;
+}
+
+.joyride-tip-guide .joyride-nub.top {
+  top: -28px;
+  bottom: auto;
+}
+
+.joyride-tip-guide .joyride-nub.bottom {
+  bottom: -28px;
+}
+
+.joyride-tip-guide .joyride-nub.right {
+  top: 22px;
+  bottom: auto;
+  left: auto;
+  right: -28px;
+}
+
+.joyride-tip-guide .joyride-nub.left {
+  top: 22px;
+  left: -28px;
+  right: auto;
+  bottom: auto;
+}
+
+.joyride-tip-guide .joyride-nub.top-right {
+  top: -28px;
+  bottom: auto;
+  left: auto;
+  right: 28px;
+}
+
+.joyride-tip-guide p {
+  margin: 0 0 1.4em;
+}
+
+.joyride-timer-indicator-wrap {
+  width: 50px;
+  height: 3px;
+  position: absolute;
+  right: 17px;
+  bottom: 16px;
+}
+.joyride-timer-indicator {
+  display: block;
+  width: 0;
+  height: inherit;
+}
+
+.joyride-close-tip {
+  position: absolute;
+  right: 0; /* LTR */
+  top: 0;
+}
+[dir="rtl"] .joyride-close-tip {
+  left: 0;
+  right: auto;
+}
+
+.joyride-modal-bg {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  display: none;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.joyride-expose-wrapper {
+  position: absolute;
+  z-index: 102;
+}
+
+.joyride-expose-cover {
+  position: absolute;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+}
+
+/* Default styles for the container */
+body .joyride-tip-guide {
+  background: #000;
+  background: rgba(0,0,0, 0.8);
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Mobile */
+@media only screen and (max-width: 767px) {
+  .joyride-tip-guide {
+    border-radius: 0;
+  }
+}
+
+/* Add a little css triangle pip, older browser just miss out on the fanciness of it. */
+.joyride-tip-guide .joyride-nub {
+  border: solid 14px rgba(0,0,0, 0.8);
+}
+.joyride-tip-guide .joyride-nub.top {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.joyride-tip-guide .joyride-nub.bottom {
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.joyride-tip-guide .joyride-nub.right {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+.joyride-tip-guide .joyride-nub.left {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+}
+.joyride-tip-guide .joyride-nub.top-right {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+/* Typography */
+.joyride-tip-guide h2 {
+  color: #fff;
+}
+.joyride-tip-guide p {
+  line-height: 1.385em;
+}
+
+/* Button Style */
+.joyride-tip-guide .joyride-next-tip {
+  margin: 0;
+}
+.joyride-timer-indicator-wrap {
+  border: solid 1px rgba(255,255,255, 0.1);
+}
+.joyride-timer-indicator {
+  background: rgba(255,255,255, 0.25);
+}
+
+.joyride-close-tip {
+  color: rgba(255,255,255, 0.4);
+  text-decoration: none;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+.joyride-close-tip:hover,
+.joyride-close-tip:focus {
+  color: rgba(255,255,255, 0.9);
+  text-decoration: none;
+}
+
+.joyride-modal-bg {
+  background: rgba(0,0,0, 0.5);
+}
+
+.joyride-expose-wrapper {
+  background-color: #ffffff;
+}
+
+.joyride-expose-cover {
+  background: transparent;
+}
+
+.joyride-tip-guide textarea {
+  width: 100%;
+}

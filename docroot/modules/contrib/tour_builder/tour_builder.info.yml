@@ -1,0 +1,8 @@
+name: 'Tour builder'
+type: module
+description: 'Helps building and editing tours.'
+package: Development
+
+core: 8.x
+dependencies:
+  - tour_ui

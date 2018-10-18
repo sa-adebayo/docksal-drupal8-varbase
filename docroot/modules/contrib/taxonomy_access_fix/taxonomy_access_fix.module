@@ -1,0 +1,50 @@
+<?php
+
+use Drupal\Core\Render\Element;
+use Drupal\taxonomy_access_fix\TaxonomyAccessFixPermissions;
+use Drupal\taxonomy_access_fix\TermAccessFixTermControlHandler;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function taxonomy_access_fix_entity_type_alter(array &$entity_types) {
+  $entity_types['taxonomy_vocabulary']->setHandlerClass('list_builder', 'Drupal\taxonomy_access_fix\VocabularyListBuilder');
+  $entity_types['taxonomy_term']->setHandlerClass('access', TermAccessFixTermControlHandler::class);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for taxonomy_overview_terms().
+ *
+ * @see taxonomy_overview_terms()
+ */
+function taxonomy_access_fix_form_taxonomy_overview_terms_alter(&$form, &$form_state) {
+  // Admin: don't fix anything.
+  if (Drupal::currentUser()->hasPermission('administer taxonomy')) {
+    return;
+  }
+  $vocabulary = $form_state->get(['taxonomy', 'vocabulary']);
+  $can_edit = TaxonomyAccessFixPermissions::fixAccess('edit terms', $vocabulary);
+  $can_delete = TaxonomyAccessFixPermissions::fixAccess('delete terms', $vocabulary);
+  $can_reorder = TaxonomyAccessFixPermissions::fixAccess('reorder terms', $vocabulary);
+  // Remove edit/delete links.
+  foreach (Element::children($form['terms']) as $name) {
+    if (!$can_edit) {
+      unset($form['terms'][$name]['operations']['#links']['edit']);
+    }
+    if (!$can_delete) {
+      unset($form['terms'][$name]['operations']['#links']['delete']);
+    }
+    if (!$can_reorder) {
+      unset($form['terms'][$name]['weight']);
+    }
+  }
+  if (!$can_reorder) {
+    // Hide Save and Reset buttons.
+    $form['actions']['#access'] = FALSE;
+    // Remove tableDrag.
+    unset($form['terms']['#tabledrag']);
+    // Remove Weight column.
+    unset($form['terms']['#header'][1]);
+  }
+}
+

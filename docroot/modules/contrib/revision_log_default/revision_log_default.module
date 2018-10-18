@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @file Contains hook implementations for the revision_log_default module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\RevisionLogInterface;
+
+/**
+ * Implements hook_entity_presave().
+ */
+function revision_log_default_entity_presave(EntityInterface $entity) {
+  if ($entity instanceof ContentEntityInterface && $entity instanceof RevisionLogInterface) {
+    if (empty($entity->getRevisionLogMessage())) {
+      $original = _revision_log_default_get_original($entity);
+      $entity_type = $entity->getEntityType();
+      if ($bundle_type = $entity_type->getBundleEntityType()) {
+        $bundle = \Drupal::entityTypeManager()
+          ->getStorage($bundle_type)
+          ->load($entity->bundle());
+        $label = $bundle->label();
+      }
+      else {
+        $label = $entity_type->getLabel();
+      }
+      // Use the current timestamp if the revision_timestamp is the same as its
+      // original value (often happens with custom code, REST, and Quick Edit).
+      if (($original && $entity->getRevisionCreationTime() === $original->getRevisionCreationTime()) || empty($entity->getRevisionCreationTime())) {
+        $entity->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+      }
+      // The revision UID is not always set correctly, in particular when using
+      // the command line or when running migrations.
+      $current_user_id = \Drupal::currentUser()->id();
+      if ($current_user_id === 0 && method_exists($entity, 'getOwnerId')) {
+        $entity->setRevisionUserId($entity->getOwnerId());
+      }
+      else {
+        $entity->setRevisionUserId($current_user_id);
+      }
+      if ($entity->isNew()) {
+        $entity->setRevisionLogMessage(t('Created new @label', [
+          '@label' => $label,
+        ]));
+      }
+      elseif ($entity->isNewTranslation()) {
+        $entity->setRevisionLogMessage(t('Created @language translation', [
+          '@language' => $entity->language()->getName(),
+        ]));
+      }
+      else {
+        $changed_fields = [];
+        $ignore = ['changed', $entity_type->getKey('revision')];
+        /** @var \Drupal\Core\Field\FieldItemListInterface $field_items */
+        foreach ($entity as $field_name => $field_items) {
+          if (in_array($field_name, $ignore, TRUE) || strpos($field_name, 'revision') !== FALSE || ($field_name === 'path' && isset($entity->path->pathauto))) {
+            continue;
+          }
+          if (!$original->hasField($field_name) || !$field_items->equals($original->get($field_name))) {
+            $changed_fields[] = $field_items->getDataDefinition()->getLabel();
+          }
+        }
+        if (!empty($changed_fields)) {
+          if (count($changed_fields) <= 2) {
+            $entity->setRevisionLogMessage(\Drupal::translation()->formatPlural(count($changed_fields), 'Updated the @fields field', 'Updated the @fields fields', [
+              '@fields' => implode(' and ', $changed_fields),
+            ]));
+          }
+          else {
+            $last_field = array_pop($changed_fields);
+            $entity->setRevisionLogMessage(t('Updated the @fields, and @last_field fields', [
+              '@fields' => implode(', ', $changed_fields),
+              '@last_field' => $last_field,
+            ]));
+          }
+        }
+        else {
+          $entity->setRevisionLogMessage(t('Updated @label', [
+            '@label' => $label,
+          ]));
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Gets the original entity for an entity about to be saved.
+ *
+ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+ *   The entity that is about to be saved.
+ *
+ * @return \Drupal\Core\Entity\ContentEntityInterface
+ *   The original entity.
+ */
+function _revision_log_default_get_original(ContentEntityInterface $entity) {
+  // If the entity uses Moderation, load the latest revision as the original.
+  // This could be brought into core, but do users expect ->original to be the
+  // default revision or the last revision? It's complicated!
+  $handler = \Drupal::moduleHandler();
+  $is_moderated = FALSE;
+  if ($handler->moduleExists('content_moderation')) {
+    /** @var \Drupal\content_moderation\ModerationInformation $information */
+    $information = \Drupal::service('content_moderation.moderation_information');
+    $is_moderated = $information->isModeratedEntity($entity);
+  }
+  elseif ($handler->moduleExists('workbench_moderation')) {
+    /** @var \Drupal\workbench_moderation\ModerationInformation $information */
+    $information = \Drupal::service('workbench_moderation.moderation_information');
+    $is_moderated = $information->isModeratableEntity($entity);
+  }
+  if ($is_moderated) {
+    $latest = $information
+      ->getLatestRevision($entity->getEntityTypeId(), $entity->id());
+    $langcode = $entity->language()->getId();
+    if ($latest && $latest->hasTranslation($langcode)) {
+      return $latest->getTranslation($langcode);
+    }
+  }
+  return $entity->original;
+}

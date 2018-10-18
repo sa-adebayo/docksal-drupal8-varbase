@@ -1,0 +1,20 @@
+body div.styleguide {
+  border: 10px solid #aaa;
+  border-radius: 5px;
+  margin: 0 -30px;
+  padding: 20px;
+}
+body h2.styleguide {
+  font: 42px bold helvetica, arial, sans-serif;
+  margin: 2em auto .5em;
+  padding: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #666;
+}
+body .styleguide-description {
+  font: 12px helvetica, arial, sans-serif;
+  margin: 0 0 .5em;
+  text-align: center;
+}

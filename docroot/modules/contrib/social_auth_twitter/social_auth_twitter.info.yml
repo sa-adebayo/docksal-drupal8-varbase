@@ -1,0 +1,14 @@
+name: Social Auth Twitter
+description: Social Auth integration for Twitter
+# core: 8.x
+type: module
+package: Social
+configure: social_auth_twitter.settings_form
+dependencies:
+  - social_auth:social_auth (>= 8.x-2.x)
+
+# Information added by Drupal.org packaging script on 2018-05-24
+version: '8.x-2.0-alpha2'
+core: '8.x'
+project: 'social_auth_twitter'
+datestamp: 1527195487

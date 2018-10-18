@@ -1,0 +1,5 @@
+services:
+  string_translator.l10n_client_ui:
+    class: Drupal\l10n_client_ui\InterfaceTranslationRecorder
+    tags:
+      - { name: string_translator, priority: 255 }

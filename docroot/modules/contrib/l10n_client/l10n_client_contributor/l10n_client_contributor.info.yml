@@ -1,0 +1,9 @@
+name: 'Localization Client Contributor'
+description: 'Contribute directly to the community from the convenience of your site.'
+type: module
+core: 8.x
+configure: locale.settings
+dependencies:
+  - xmlrpc
+  - locale
+package: Multilingual

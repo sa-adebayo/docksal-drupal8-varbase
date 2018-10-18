@@ -1,0 +1,8 @@
+name: 'Localization Client Tester'
+description: 'Localization client tester.'
+type: module
+core: 8.x
+dependencies:
+  - l10n_client_contributor
+package: Multilingual
+hidden: true

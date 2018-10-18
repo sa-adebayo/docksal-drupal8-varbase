@@ -1,0 +1,7 @@
+roleassign.settings:
+  title: 'RoleAssign settings'
+  parent: user.admin_index
+  description: "Configuration settings to further delegate the task of managing user's roles."
+  weight: -8
+  route_name: roleassign.settings
+  menu_name: admin

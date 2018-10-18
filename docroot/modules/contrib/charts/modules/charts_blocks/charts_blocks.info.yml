@@ -1,0 +1,13 @@
+name: Charts Blocks
+type: module
+description: Create Charts blocks without the need for Views.
+# core: 8.x
+package: Charts
+dependencies:
+  - charts
+
+# Information added by Drupal.org packaging script on 2018-07-18
+version: '8.x-3.0-beta1'
+core: '8.x'
+project: 'charts'
+datestamp: 1531880327

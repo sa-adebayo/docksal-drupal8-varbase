@@ -1,0 +1,18 @@
+l10n_client_contributor.settings:
+  type: config_object
+  label: 'Localization Client Contributor settings'
+  mapping:
+    use_server:
+      type: boolean
+      label: 'Use server'
+    server:
+      type: string
+      label: 'Localization server url'
+
+field.storage_settings.l10n_client_contributor_key:
+  type: field.storage_settings.string
+  label: 'Localization client contributor API key settings'
+
+field.widget.settings.l10n_client_contributor_key_widget:
+  type: field.widget.settings.string_textfield
+  label: 'Localization client contributor API key display format settings'

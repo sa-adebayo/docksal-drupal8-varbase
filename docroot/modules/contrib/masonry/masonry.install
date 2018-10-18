@@ -1,0 +1,52 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Masonry API module.
+ * 
+ * Sponsored by: www.freelance-drupal.com
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function masonry_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+
+    // Check for Masonry Library.
+    $masonry = libraries_detect('masonry');
+    $requirements['masonry'] = array(
+      'title' => t('jQuery Masonry'),
+    );
+
+    if ($masonry['installed']) {
+      $requirements['masonry']['value'] = $masonry['version'];
+      $requirements['masonry']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['masonry']['value'] = $masonry['error'];
+      $requirements['masonry']['description'] = $masonry['error message'];
+      $requirements['masonry']['severity'] = REQUIREMENT_ERROR;
+    }
+
+    // Check for imagesLoaded Library.
+    $imagesLoaded = libraries_detect('imagesloaded');
+    $requirements['masonry_imagesloaded'] = array(
+      'title' => t('jQuery Images Loaded'),
+    );
+
+    if ($imagesLoaded['installed']) {
+      $requirements['masonry_imagesloaded']['value'] = $imagesLoaded['version'];
+      $requirements['masonry_imagesloaded']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['masonry_imagesloaded']['value'] = $imagesLoaded['error'];
+      $requirements['masonry_imagesloaded']['description'] = $imagesLoaded['error message'];
+      $requirements['masonry_imagesloaded']['severity'] = REQUIREMENT_ERROR;
+    }
+  }
+
+  return $requirements;
+}
+

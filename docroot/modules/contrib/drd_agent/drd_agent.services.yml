@@ -1,0 +1,7 @@
+services:
+  drd_agent.setup:
+    class: Drupal\drd_agent\Setup
+    arguments: []
+  drd_agent.library:
+    class: Drupal\drd_agent\Library
+    arguments: []

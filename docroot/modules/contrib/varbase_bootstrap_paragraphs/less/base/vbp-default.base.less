@@ -1,0 +1,87 @@
+// Varbase Bootstrap Paragraphs Default base styling.
+// -----------------------------------------------------------------------------
+@import "../../../bootstrap/less/variables.less";  // Bootstrap variables.
+@import "../../../bootstrap/less/mixins.less";     // Bootstrap mixins.
+// -----------------------------------------------------------------------------
+
+.paragraph {
+  .make-row();
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.paragraph > .paragraph__column {
+  padding-bottom: @jumbotron-padding;
+}
+
+.paragraph__column {
+  padding: 0 25px;
+}
+.paragraph--type--bp-carousel .paragraph:last-of-type > .paragraph__column,
+.paragraph--type--bp-columns .paragraph:last-of-type > .paragraph__column,
+.paragraph--type--bp-columns-three-uneven .paragraph:last-of-type > .paragraph__column,
+.paragraph--type--bp-columns-two-uneven .paragraph:last-of-type > .paragraph__column,
+.paragraph--type--bp-tabs .paragraph:last-of-type > .paragraph__column {
+  padding-bottom: 0;
+}
+
+// Nesting paragraphs.
+.paragraph .paragraph .bg-edge2edge,
+.paragraph .paragraph.bg-edge2edge {
+  width: 100%;
+  position: initial;
+  margin: 0;
+}
+// Resets Base Paragraph Styling for Nested Paragraphs.
+.paragraph .paragraph .paragraph , 
+.modal .modal-body .paragraph, .modal .modal-footer .paragraph {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  position: initial;
+}
+
+.paragraph > .paragraph__column .paragraph > .paragraph__column,
+.paragraph > .paragraph__column .paragraph > .paragraph__column .paragraph > .paragraph__column {
+  float: none;
+}
+
+.paragraph__column > div > .paragraph ,
+.paragraph__column > .tab-content > .tab-pane > .paragraph {
+  width: 100%;
+  margin-right: 0px;
+  margin-left: 0px;
+  left: 0;
+  right: 0;
+}
+
+// Columns Modifiers inside of Columns Element.
+.paragraph.paragraph--type--bp-columns .paragraph--type--bp-columns__6col {
+  .make-sm-column(2);
+}
+
+.paragraph.paragraph--type--bp-columns .paragraph--type--bp-columns__5col {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  @media (min-width: 768px) {
+    float: left;
+    width: 20%;
+  }
+}
+
+.paragraph--type--bp-columns__1col .paragraph.paragraph--width--narrow > .paragraph__column {
+  .make-sm-column(6);
+  .make-sm-column-offset(3);
+  .make-md-column(6);
+  .make-md-column-offset(3);
+  .make-lg-column(6);
+  .make-lg-column-offset(3);
+}
+
+.background-style {
+  background-size: cover;
+  background-repeat: no-repeat;
+}

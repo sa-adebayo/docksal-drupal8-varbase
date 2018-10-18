@@ -1,0 +1,20 @@
+styleguide.page:
+  path: /admin/appearance/styleguide
+  defaults:
+    _controller: Drupal\styleguide\Controller\StyleguideController::page
+  requirements:
+    _permission: 'view style guides'
+  options:
+    _admin_route: FALSE
+
+styleguide.maintenance_page:
+  path: /admin/appearance/styleguide/maintenance-page
+  defaults:
+    _controller: Drupal\styleguide\Controller\StyleguideMaintenancePageController::page
+  requirements:
+    _permission: 'view style guides'
+  options:
+    _admin_route: FALSE
+
+route_callbacks:
+  - 'styleguide.routes::routes'

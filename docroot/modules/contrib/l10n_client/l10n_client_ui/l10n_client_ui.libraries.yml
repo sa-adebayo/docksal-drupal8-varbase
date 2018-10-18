@@ -1,0 +1,14 @@
+l10n_client_ui:
+  version: VERSION
+  js:
+    js/l10n_client_ui.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/jquery.cookie
+    - core/drupal.dialog
+    - core/jquery.joyride
+  css:
+    component:
+      css/l10n_client_ui.css: {}

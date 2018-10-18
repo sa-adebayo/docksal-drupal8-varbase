@@ -1,0 +1,379 @@
+<?php
+
+/**
+ * @file
+ * Contains varbase_media.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\editor\Entity\Editor;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\ds\Ds;
+use Drupal\entity_browser_generic_embed\OverrideHelper as Override;
+use Drupal\varbase_media\Plugin\media\Source\Video;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Datetime\Entity\DateFormat;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\image\Entity\ImageStyle;
+
+
+/**
+ * Implements hook_page_attachments().
+ */
+function varbase_media_page_attachments(array &$page) {
+  // Attached the varbase media common library.
+  $page['#attached']['library'][] = 'varbase_media/common';
+
+  if (!(\Drupal::currentUser()->isAnonymous())) {
+    // Attached the varbase media common logged in users library.
+    $page['#attached']['library'][] = 'varbase_media/common_logged';
+  }
+}
+
+/**
+ * Implements hook_ckeditor_css_alter().
+ */
+function varbase_media_ckeditor_css_alter(array &$css, Editor $editor) {
+
+  // Varbase media path.
+  $varbase_media_path = Drupal::service('module_handler')->getModule('varbase_media')->getPath();
+  
+  // Attached the varbase media common style.
+  $css[] = $varbase_media_path . '/css/varbase_media.common.css';
+
+  // Attached the varbase media common logged in users style.
+  $css[] = $varbase_media_path . '/css/varbase_media.common_logged.css';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function varbase_media_form_entity_embed_dialog_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Only at the embed step.
+  if ($form_state->get('step') == 'embed') {
+
+    // Get the entity values and attributes.
+    $entity_element = empty($values['attributes']) ? array() : $values['attributes'];
+    $entity_element += $form_state->get('entity_element');
+    $form_state->set('entity_element', $entity_element);
+    $entity = $form_state->get('entity');
+
+    // Get the entity bundle type.
+    $bundle_type = $entity->bundle();
+    $values = $form_state->getValues();
+
+    switch ($bundle_type) {
+      case "image":
+
+        // Adding the alt field to the embed dialog form.
+        $form['attributes']['alt'] = [
+          '#title' => t('Alternative text'),
+          '#type' => 'textfield',
+          '#required' => TRUE ,
+          '#default_value' => $entity->field_media_image->alt,
+          '#description' => t('This text will be used by screen readers, search engines, or when the image cannot be loaded.'),
+        ];
+
+        // Adding the title field to the embed dialog form.
+        $form['attributes']['title'] = [
+          '#title' => t('Title'),
+          '#type' => 'textfield',
+          '#default_value' => $entity->field_media_image->title,
+          '#description' => t('The title is used as a tool tip when the user hovers the mouse over the image.'),
+        ];
+
+        // Render the Embed entity.
+        $form['entity'] = [
+          '#type' => 'item',
+          '#markup' => \Drupal::service('renderer')->renderRoot(entity_view($entity, 's03')),
+        ];
+
+        // Change the "data align" field from radio buttons to Select list.
+        $form['attributes']['data-align']['#type'] = 'select';
+        $form['attributes']['data-align']['#wrapper_attributes'] = '';
+        $form['attributes']['data-align']['#description'] = t('Choose the positioning of the image.');
+        $form['attributes']['data-align']['#weight'] = -10;
+
+        // Add description for the caption field.
+        $form['attributes']['data-caption'] += [
+          '#description' => t('A caption will be displayed under the image, to describe it in context of your content.'),
+        ];
+
+        // Adding the updated alt text to the media entity.
+        if (isset($entity_element['alt'])) {
+          $entity->field_media_image->alt = $entity_element['alt'];
+        }
+
+        // Adding the updated title text to the media entity.
+        if (isset($entity_element['title'])) {
+          $entity->field_media_image->title = $entity_element['title'];
+        }
+
+        if (isset($form['attributes']['data-entity-embed-display-settings'])) {
+          $form['attributes']['data-entity-embed-display-settings']['link_url']['#description'] = t('Start typing the title of a piece of content to select it. You can also enter an <br /> internal path such as /node/add or an external URL such as http://example.com.');
+        }
+
+        $entity->save();
+        break;
+
+      case "video":
+      case "video_embed":
+        // Render the Embed entity.
+        $form['entity'] = [
+          '#type' => 'item',
+          '#markup' => \Drupal::service('renderer')->renderRoot(entity_view($entity, 's06')),
+        ];
+
+        if (isset($form['attributes']['data-align'])) {
+          unset($form['attributes']['data-align']);
+        }
+
+        if (isset($form['attributes']['data-entity-embed-display-settings'])) {
+          unset($form['attributes']['data-entity-embed-display-settings']);
+        }
+
+        if (isset($form['attributes']['data-caption'])) {
+          unset($form['attributes']['data-caption']);
+        }
+
+        if (isset($form['attributes']['data-entity-embed-display'])) {
+          $form['attributes']['data-entity-embed-display']['#access'] = FALSE;
+          $form['attributes']['data-entity-embed-display']['#default_value'] = 'view_mode:media.original';
+        }
+
+      break;
+      default :
+        if (isset($form['attributes']['data-entity-embed-display-settings'])) {
+          unset($form['attributes']['data-entity-embed-display-settings']);
+        }
+    }
+
+    if (isset($form['revision_log_message'])) {
+      $form['revision_log_message']['#access'] = false;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function varbase_media_theme_registry_alter(&$theme_registry) {
+  // Varbase media path.
+  $varbase_media_path = Drupal::service('module_handler')->getModule('varbase_media')->getPath();
+  $theme_registry['entity_embed_container']['path'] = $varbase_media_path . '/templates';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function varbase_media_preprocess_entity_embed_container(&$variables) {
+  $variables['url'] = isset($variables['element']['#context']['data-entity-embed-display-settings']['link_url']) ? UrlHelper::filterBadProtocol($variables['element']['#context']['data-entity-embed-display-settings']['link_url']) : '';
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function varbase_media_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+
+  if ($entity->getEntityTypeId() == 'media'
+    && $build['#view_mode'] != 'field_preview') {
+    if(isset($build['field_media_cover_image'])
+      && isset($build['field_media_cover_image']['#items'])) {
+
+      $fields = $build['field_media_cover_image']['#items'];
+
+      if (is_object($fields)) {
+
+        // Hide thumbnail of media if we do have cover image data.
+        if (isset($build['thumbnail'])) {
+          $build['thumbnail']['#access'] = FALSE;
+        }
+        
+        $build['field_media_cover_image']['#attached']['library'][] = 'varbase_media/varbase_video_player';
+      }
+    }
+
+    // Attach the varbase media video library for video embed field.
+    if (isset($build['field_media_video_embed_field'])
+      && isset($build['field_media_video_embed_field'][0])) {
+      $build['field_media_video_embed_field'][0]['#attached']['library'][] = 'varbase_media/varbase_video_player';
+    }
+
+    // Attach the varbase media video library for video file field.
+    if (isset($build['field_media_video_file'])) {
+      $build['field_media_video_file']['#attached']['library'][] = 'varbase_media/varbase_video_player';
+    }
+  }
+}
+
+/**
+ * Implements hook_media_source_info_alter().
+ */
+function varbase_media_media_source_info_alter(array &$sources) {
+  $sources['video_embed_field']['input_match'] = [
+    'field_types' => [
+      'string',
+      'string_long',
+      'video_embed_field',
+    ],
+  ];
+  $sources['video_embed_field']['preview'] = TRUE;
+
+  Override::pluginClass($sources['video_embed_field'], Video::class);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function varbase_media_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_state->getFormObject() instanceof \Drupal\Core\Entity\EntityFormInterface) {
+    $entity_type = $form_state->getFormObject()->getEntity()->getEntityTypeId();
+
+    // Only for media entity type.
+    if ($entity_type == 'media') {
+      // No revision information or revision log message.
+      if (isset($form['revision_information'])) {
+        $form['revision_information']['#access'] = FALSE;
+      }
+    }
+  }
+
+  if ($form_id == 'entity_browser_image_browser_form'
+      || $form_id == 'entity_browser_media_browser_form'
+      || $form_id == 'entity_browser_editor_media_browser_form') {
+    $form['#attached']['library'][] = 'varbase_media/auto_fill_media_data';
+  }
+}
+
+/**
+ * Implements hook_token_info_alter().
+ */
+function varbase_media_token_info_alter(&$data) {
+
+  $data['tokens']['media']['social_large'] = [
+    'name' => t('Social Large'),
+    'description' => t("Social Large (1200x630) image for the selected media type."),
+    'module' => 'media',
+    'type' => 'url',
+  ];
+
+  $data['tokens']['media']['social_medium'] = [
+    'name' => t('Social Medium'),
+    'description' => t("Social Medium (600x315) image for the selected media type."),
+    'module' => 'media',
+    'type' => 'url',
+  ];
+
+  $data['tokens']['media']['social_small'] = [
+    'name' => t('Social Small'),
+    'description' => t("Social Small (280x150) image for the selected media type."),
+    'module' => 'media',
+    'type' => 'url',
+  ];
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function varbase_media_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+
+  $url_options = ['absolute' => TRUE];
+  if (isset($options['langcode'])) {
+    $url_options['language'] = \Drupal::languageManager()->getLanguage($options['langcode']);
+    $langcode = $options['langcode'];
+  }
+  else {
+    $langcode = LanguageInterface::LANGCODE_DEFAULT;
+  }
+
+  $replacements = [];
+  if ($type === 'media' && !empty($data['media'])) {
+    /** @var \Drupal\media\MediaInterface $media_entity */
+    $media_entity = \Drupal::service('entity.repository')->getTranslationFromContext($data['media'], $langcode, ['operation' => 'media_entity_tokens']);
+
+    foreach ($tokens as $token_name => $original) {
+      switch ($token_name) {
+
+        // Social Large (1200x630) image for the selected media type.
+        case 'social_large':
+          $replacements[$original] = _varbase_media_image_url($media_entity, 'social_large');
+        break;
+
+        // Social Medium (600x315) image for the selected media type.
+        case 'social_medium':
+          $replacements[$original] = _varbase_media_image_url($media_entity, 'social_medium');
+        break;
+
+        // Social Small (280x150) image for the selected media type.
+        case 'social_small':
+          $replacements[$original] = _varbase_media_image_url($media_entity, 'social_small');
+        break;
+      }
+    }
+  }
+
+  return $replacements;
+}
+
+/**
+ * Get the URL with image style for a selected media entity.
+ * 
+ */
+function _varbase_media_image_url($media_entity, $style_name = NULL) {
+
+  $image_field_name = _varbase_media_default_image_field_name($media_entity);
+
+  if ($img_entity = $media_entity->get($image_field_name)->first()) {
+    if ($file_entity = $img_entity->get('entity')->getTarget()) {
+      if (!empty($style_name)) {
+        return ImageStyle::load($style_name)
+          ->buildUrl($file_entity->get('uri')
+          ->first()
+          ->getString());
+      }
+      else {
+        return file_create_url($file_entity->get('uri')->getString());
+      }
+    }
+  }
+
+  return NULL;
+}
+
+/**
+ * Get the default image field name for this media entity. 
+ */
+function _varbase_media_default_image_field_name($media_entity) {
+
+  $media_bundle = $media_entity->bundle();
+
+  switch ($media_bundle) {
+    case "image":
+        return 'field_media_image';
+    break;
+    case "video":
+      if ($img_entity = $media_entity->get('field_media_cover_image')->first()) {
+        return 'field_media_cover_image';
+      }
+      elseif ($img_entity = $media_entity->get('field_media_video_file')->first()) {
+        return 'thumbnail';
+      }
+    break;
+    case "video_embed":
+      if ($img_entity = $media_entity->get('field_media_cover_image')->first()) {
+        return 'field_media_cover_image';
+      }
+      elseif ($img_entity = $media_entity->get('field_media_video_embed_field')->first()) {
+        return 'thumbnail';
+      }
+    break;
+  }
+
+  return 'thumbnail';
+}

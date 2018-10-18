@@ -1,0 +1,32 @@
+{
+  "name": "vardot/total_control",
+  "description": "Total Control Administration Dashboard",
+  "type": "drupal-module",
+  "homepage": "https://github.com/Vardot/total_control",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Jen Lampton",
+      "homepage": "https://github.com/jenlampton",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Mohammed J. Razem",
+      "homepage": "https://github.com/moerazem",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Abdulla Abu-Zakham",
+      "homepage": "https://github.com/abuzakham",
+      "role": "Maintainer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    }
+  ],
+  "require": { }
+}

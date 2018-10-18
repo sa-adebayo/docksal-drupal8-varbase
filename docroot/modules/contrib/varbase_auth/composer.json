@@ -1,0 +1,61 @@
+{
+  "name": "drupal/varbase_auth",
+  "description": "Varbase Social Single Sign-On: Adds single sign-on using existing information from a social networking service such as Facebook, Twitter or Google+",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/varbase_auth",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/varbase_auth",
+    "source": "http://cgit.drupalcode.org/varbase_auth"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+      },
+    "assets": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  },
+  "require": {
+    "composer/installers": "^1.5.0",
+    "oomphinc/composer-installers-extender": "^1.1.2",
+    "cweagans/composer-patches": "^1.6.4",
+    "drupal/drupal-library-installer-plugin": "^0.3",
+    "drupal/varbase_core": "5.*",
+    "drupal/login_destination": "1.x-dev#54be8b89fdc073ca40af6b9b2eeb050e0aeb7908",
+    "drupal/betterlogin": "1.x-dev#f7cf1c5c9ec5e80c6ac0ef04ed605e25495232cd",
+    "drupal/social_api": "^2.0-beta4",
+    "drupal/social_auth": "^2.0-beta4",
+    "drupal/social_auth_google": "^2.0-beta3",
+    "drupal/social_auth_facebook": "^2.0-beta3",
+    "drupal/social_auth_twitter": "^2.0-alpha2",
+    "drupal/social_auth_linkedin": "^2.0-beta1"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-5.x": "8.5.x-dev"
+    },
+    "installer-types": [
+      "bower-asset",
+      "npm-asset"
+    ],
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true,
+    "patches": {
+      "drupal/login_destination": {
+        "Issue #2947616: Fixed SetOptions on null causing error.":
+        "https://www.drupal.org/files/issues/2018-03-09/toolbar_alter_error-2947616-11.patch"
+      }
+    }
+  }
+}

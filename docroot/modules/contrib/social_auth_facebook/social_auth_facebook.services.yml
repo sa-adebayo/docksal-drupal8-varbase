@@ -1,0 +1,5 @@
+services:
+  social_auth_facebook.manager:
+    class: Drupal\social_auth_facebook\FacebookAuthManager
+    arguments:
+      - '@config.factory'

@@ -1,0 +1,8 @@
+<?php
+
+function tour_builder_install() {
+  // Set higher then tour_ui or tour module
+  module_set_weight('tour_builder', 1);
+  // TODO: this does not work
+  //Drupal::cache()->invalidateAll();
+}
